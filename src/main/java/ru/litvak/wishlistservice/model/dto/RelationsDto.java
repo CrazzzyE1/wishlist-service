@@ -1,14 +1,14 @@
 package ru.litvak.wishlistservice.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import ru.litvak.wishlistservice.enumerated.PrivacyLevel;
 
 @Getter
 @Setter
-@ToString
 public class RelationsDto {
     private PrivacyLevel privacyLevel;
-    private boolean isFriend;
+    @JsonProperty("isFriends")
+    private boolean isFriends;
 }

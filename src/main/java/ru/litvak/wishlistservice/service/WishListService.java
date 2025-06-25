@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface WishListService {
-    List<WishListDto> getMyWishLists(String authHeader);
+    List<WishListDto> getOwnerWishLists(String authHeader);
 
     IdResponse createWishList(String authHeader, WishListDto dto);
 

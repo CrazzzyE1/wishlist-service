@@ -21,7 +21,7 @@ public class WishListServiceImpl implements WishListService {
     private final WishListMapper wishListMapper;
 
     @Override
-    public List<WishListDto> getMyWishLists(String authHeader) {
+    public List<WishListDto> getOwnerWishLists(String authHeader) {
         UUID me = JwtTokenMapper.parseUserId(authHeader);
         List<WishListDto> dtoList = wishListMapper.toListDto(wishListManager.getWishLists(me, me));
         dtoList.forEach(w -> w.setIsOwner(true));
@@ -46,6 +46,4 @@ public class WishListServiceImpl implements WishListService {
         wishList.setUserId(JwtTokenMapper.parseUserId(authHeader));
         return wishListManager.create(wishList);
     }
-
-
 }

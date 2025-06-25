@@ -2,6 +2,7 @@ package ru.litvak.wishlistservice.manager.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.litvak.wishlistservice.enumerated.PrivacyLevel;
 import ru.litvak.wishlistservice.integration.UserServiceFacade;
 import ru.litvak.wishlistservice.manager.WishListManager;
 import ru.litvak.wishlistservice.model.dto.RelationsDto;
@@ -9,7 +10,6 @@ import ru.litvak.wishlistservice.model.entity.WishList;
 import ru.litvak.wishlistservice.model.response.IdResponse;
 import ru.litvak.wishlistservice.repository.WishListRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,12 +25,22 @@ public class WishListServiceManagerImpl implements WishListManager {
 
     @Override
     public List<WishList> getWishLists(UUID me, UUID userId) {
-        List<WishList> wishLists = new ArrayList<>();
-//        if (userId.equals(me) || isAvailableToShow(me, userId)) {
-        if (isAvailableToShow(me, userId)) {
-            wishLists = wishListRepository.findByUserId(userId);
+        if (userId.equals(me)) {
+            return wishListRepository.findByUserId(userId);
         }
-        return wishLists;
+
+        RelationsDto relationsDto = userServiceFacade.getRelations(me, userId);
+        PrivacyLevel userPrivacyLevel = relationsDto.getPrivacyLevel();
+        boolean friends = relationsDto.isFriends();
+        if (PUBLIC.equals(userPrivacyLevel)) {
+            List<PrivacyLevel> searchPrivacyLevels = friends ? List.of(PUBLIC, FRIENDS_ONLY) : List.of(PUBLIC);
+            return wishListRepository.findByUserIdAndPrivacyLevelIn(userId, searchPrivacyLevels);
+        }
+
+        if (FRIENDS_ONLY.equals(userPrivacyLevel) && friends) {
+            return wishListRepository.findByUserIdAndPrivacyLevelIn(userId, List.of(PUBLIC, FRIENDS_ONLY));
+        }
+        return List.of();
     }
 
     @Override
@@ -47,11 +57,5 @@ public class WishListServiceManagerImpl implements WishListManager {
     public WishList get(UUID me, String id) {
         // FIXME 25.06.2025:11:40: add logic
         return null;
-    }
-
-    private boolean isAvailableToShow(UUID me, UUID userId) {
-        RelationsDto relationsDto = userServiceFacade.getRelations(me, userId);
-        return PUBLIC.equals(relationsDto.getPrivacyLevel()) ||
-                FRIENDS_ONLY.equals(relationsDto.getPrivacyLevel()) && relationsDto.isFriend();
     }
 }

@@ -20,7 +20,7 @@ public class WishlistController {
 
     @GetMapping("/me")
     public List<WishListDto> getOwnerWishLists(@RequestHeader(value = "Authorization") String authHeader) {
-        return wishListService.getMyWishLists(authHeader);
+        return wishListService.getOwnerWishLists(authHeader);
     }
 
     @GetMapping("/user/{userId}")
