@@ -1,0 +1,15 @@
+package ru.litvak.wishlistservice.manager;
+
+import ru.litvak.wishlistservice.model.entity.WishList;
+import ru.litvak.wishlistservice.model.response.IdResponse;
+
+import java.util.List;
+import java.util.UUID;
+
+public interface WishListManager {
+    List<WishList> getWishLists(UUID me, UUID userId);
+
+    IdResponse create(WishList wishList);
+
+    WishList get(UUID me, String id);
+}
