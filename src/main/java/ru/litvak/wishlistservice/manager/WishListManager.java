@@ -11,5 +11,5 @@ public interface WishListManager {
 
     IdResponse create(WishList wishList);
 
-    WishList get(UUID me, String id);
+    WishList getById(UUID me, String id);
 }

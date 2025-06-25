@@ -2,9 +2,12 @@ package ru.litvak.wishlistservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.litvak.wishlistservice.manager.GiftManager;
 import ru.litvak.wishlistservice.manager.WishListManager;
+import ru.litvak.wishlistservice.mapper.GiftMapper;
 import ru.litvak.wishlistservice.mapper.WishListMapper;
 import ru.litvak.wishlistservice.model.dto.WishListDto;
+import ru.litvak.wishlistservice.model.entity.Gift;
 import ru.litvak.wishlistservice.model.entity.WishList;
 import ru.litvak.wishlistservice.model.response.IdResponse;
 import ru.litvak.wishlistservice.service.WishListService;
@@ -18,7 +21,9 @@ import java.util.UUID;
 public class WishListServiceImpl implements WishListService {
 
     private final WishListManager wishListManager;
+    private final GiftManager giftManager;
     private final WishListMapper wishListMapper;
+    private final GiftMapper giftMapper;
 
     @Override
     public List<WishListDto> getOwnerWishLists(String authHeader) {
@@ -37,7 +42,14 @@ public class WishListServiceImpl implements WishListService {
     @Override
     public WishListDto getWishListById(String authHeader, String wishlistId) {
         UUID me = JwtTokenMapper.parseUserId(authHeader);
-        return wishListMapper.toDto(wishListManager.get(me, wishlistId));
+        WishList wishList = wishListManager.getById(me, wishlistId);
+        WishListDto dto = wishListMapper.toDto(wishList);
+        if (dto == null) {
+            return null;
+        }
+        List<Gift> gifts = giftManager.getAllByWishListId(dto.getId());
+        dto.setGifts(giftMapper.toListDto(gifts));
+        return dto;
     }
 
     @Override

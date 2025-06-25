@@ -18,7 +18,7 @@ import static ru.litvak.wishlistservice.enumerated.PrivacyLevel.PUBLIC;
 
 @Component
 @RequiredArgsConstructor
-public class WishListServiceManagerImpl implements WishListManager {
+public class WishListManagerImpl implements WishListManager {
 
     private final WishListRepository wishListRepository;
     private final UserServiceFacade userServiceFacade;
@@ -54,8 +54,23 @@ public class WishListServiceManagerImpl implements WishListManager {
     }
 
     @Override
-    public WishList get(UUID me, String id) {
-        // FIXME 25.06.2025:11:40: add logic
+    public WishList getById(UUID me, String id) {
+        WishList wishList = wishListRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("WishList with id %s not found.".formatted(id)));
+        UUID userId = wishList.getUserId();
+        RelationsDto relationsDto = userServiceFacade.getRelations(me, userId);
+        PrivacyLevel userPrivacyLevel = relationsDto.getPrivacyLevel();
+        boolean friends = relationsDto.isFriends();
+
+        if (PUBLIC.equals(userPrivacyLevel)) {
+            List<PrivacyLevel> searchPrivacyLevels = friends ? List.of(PUBLIC, FRIENDS_ONLY) : List.of(PUBLIC);
+            return searchPrivacyLevels.contains(wishList.getPrivacyLevel()) ? wishList : null;
+        }
+
+        if (FRIENDS_ONLY.equals(userPrivacyLevel) && friends) {
+            return List.of(PUBLIC, FRIENDS_ONLY).contains(wishList.getPrivacyLevel()) ? wishList : null;
+        }
+
         return null;
     }
 }

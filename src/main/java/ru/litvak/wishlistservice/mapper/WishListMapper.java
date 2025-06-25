@@ -11,6 +11,7 @@ import java.util.List;
 public interface WishListMapper {
 
     @Mapping(target = "isOwner", ignore = true)
+    @Mapping(target = "gifts", ignore = true)
     WishListDto toDto(WishList entity);
 
     List<WishListDto> toListDto(List<WishList> list);

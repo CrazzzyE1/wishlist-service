@@ -6,6 +6,7 @@ import lombok.Setter;
 import ru.litvak.wishlistservice.enumerated.PrivacyLevel;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,4 +18,5 @@ public class WishListDto {
     private LocalDate eventDate;
     private PrivacyLevel privacyLevel;
     private Boolean isOwner;
+    private List<GiftDto> gifts;
 }
