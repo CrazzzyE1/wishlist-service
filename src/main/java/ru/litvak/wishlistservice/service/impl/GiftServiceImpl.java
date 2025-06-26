@@ -23,4 +23,10 @@ public class GiftServiceImpl implements GiftService {
         UUID me = JwtTokenMapper.parseUserId(authHeader);
         return giftManager.create(me, giftMapper.toEntity(giftDto));
     }
+
+    @Override
+    public void deleteGift(String authHeader, String id) {
+        UUID me = JwtTokenMapper.parseUserId(authHeader);
+        giftManager.delete(me, id);
+    }
 }

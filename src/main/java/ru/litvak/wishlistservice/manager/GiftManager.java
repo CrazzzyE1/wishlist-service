@@ -11,4 +11,6 @@ public interface GiftManager {
     List<Gift> getAllByWishListId(String id);
 
     IdResponse create(UUID me, Gift gift);
+
+    void delete(UUID me, String id);
 }

@@ -21,4 +21,11 @@ public class GiftController {
                                  @RequestBody @Valid GiftDto giftDto) {
         return giftService.createGift(authHeader, giftDto);
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(value = "/{id}")
+    public void deleteGift(@RequestHeader(value = "Authorization") String authHeader,
+                           @PathVariable String id) {
+        giftService.deleteGift(authHeader, id);
+    }
 }

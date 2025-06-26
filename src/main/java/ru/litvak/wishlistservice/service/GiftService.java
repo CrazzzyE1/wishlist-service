@@ -6,4 +6,6 @@ import ru.litvak.wishlistservice.model.response.IdResponse;
 
 public interface GiftService {
     IdResponse createGift(String authHeader, @Valid GiftDto giftDto);
+
+    void deleteGift(String authHeader, String id);
 }

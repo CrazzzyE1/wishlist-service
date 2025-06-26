@@ -44,4 +44,9 @@ public class GiftManagerManagerImpl implements GiftManager {
         Gift saved = giftRepository.save(gift);
         return new IdResponse(saved.getId());
     }
+
+    @Override
+    public void delete(UUID me, String id) {
+        giftRepository.deleteByIdAndUserId(id, me);
+    }
 }
