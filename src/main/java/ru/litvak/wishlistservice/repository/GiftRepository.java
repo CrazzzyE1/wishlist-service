@@ -11,6 +11,9 @@ import java.util.UUID;
 public interface GiftRepository extends MongoRepository<Gift, String> {
 
     List<Gift> findAllByWishListId(final String wishListId);
+    List<Gift> findAllByWishListIdIn(List<String> wishListId);
 
     void deleteByIdAndUserId(final String id, final UUID userId);
+
+    List<Gift> findByUserId(UUID userId);
 }

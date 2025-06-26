@@ -23,6 +23,7 @@ public class Gift {
     private UUID userId;
     private String name;
     private BigDecimal price;
+    private String link;
     private PrivacyLevel privacyLevel = PrivacyLevel.PUBLIC;
     @CreatedDate
     private Instant createdAt;

@@ -14,5 +14,6 @@ public class GiftDto {
     @NotNull
     private String name;
     private BigDecimal price;
+    private String link;
     private Boolean isOwner;
 }

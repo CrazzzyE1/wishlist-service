@@ -13,4 +13,6 @@ public interface GiftManager {
     IdResponse create(UUID me, Gift gift);
 
     void delete(UUID me, String id);
+
+    List<Gift> getGifts(UUID me, UUID userId);
 }

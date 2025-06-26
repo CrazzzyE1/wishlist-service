@@ -9,6 +9,7 @@ import ru.litvak.wishlistservice.model.response.IdResponse;
 import ru.litvak.wishlistservice.service.GiftService;
 import ru.litvak.wishlistservice.util.JwtTokenMapper;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -28,5 +29,17 @@ public class GiftServiceImpl implements GiftService {
     public void deleteGift(String authHeader, String id) {
         UUID me = JwtTokenMapper.parseUserId(authHeader);
         giftManager.delete(me, id);
+    }
+
+    @Override
+    public List<GiftDto> getOwnerGifts(String authHeader) {
+        UUID me = JwtTokenMapper.parseUserId(authHeader);
+        return giftMapper.toListDto(giftManager.getGifts(me, me));
+    }
+
+    @Override
+    public List<GiftDto> getGifts(String authHeader, UUID userId) {
+        UUID me = JwtTokenMapper.parseUserId(authHeader);
+        return giftMapper.toListDto(giftManager.getGifts(me, userId));
     }
 }

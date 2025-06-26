@@ -1,8 +1,10 @@
 package ru.litvak.wishlistservice.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.litvak.wishlistservice.enumerated.PrivacyLevel;
+import ru.litvak.wishlistservice.model.dto.WishListId;
 import ru.litvak.wishlistservice.model.entity.WishList;
 
 import java.util.Collection;
@@ -19,4 +21,7 @@ public interface WishListRepository extends MongoRepository<WishList, String> {
     boolean existsWishListByIdAndUserId(String id, UUID userId);
 
     List<WishList> findByUserIdAndPrivacyLevelIn(UUID userId, Collection<PrivacyLevel> privacyLevels);
+
+    @Query(value = "{ 'userId': ?0, 'privacyLevel': { $in: ?1 } }", fields = "{ '_id': 1 }")
+    List<WishListId> findIdsByUserIdAndPrivacyLevelIn(UUID userId, Collection<PrivacyLevel> privacyLevels);
 }
