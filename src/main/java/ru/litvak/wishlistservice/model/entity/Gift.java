@@ -2,7 +2,6 @@ package ru.litvak.wishlistservice.model.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -12,15 +11,16 @@ import ru.litvak.wishlistservice.enumerated.PrivacyLevel;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.UUID;
 
 @Getter
 @Setter
-@ToString
 @Document(collection = "gifts")
 public class Gift {
     @Id
     private String id;
     private String wishListId;
+    private UUID userId;
     private String name;
     private BigDecimal price;
     private PrivacyLevel privacyLevel = PrivacyLevel.PUBLIC;

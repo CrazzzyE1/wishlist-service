@@ -38,7 +38,7 @@ public class WishlistController {
 
     @GetMapping("/{wishlistId}")
     public WishListDto getWishListById(@RequestHeader(value = "Authorization") String authHeader,
-                                             @PathVariable String wishlistId) {
+                                       @PathVariable String wishlistId) {
         return wishListService.getWishListById(authHeader, wishlistId);
     }
 }

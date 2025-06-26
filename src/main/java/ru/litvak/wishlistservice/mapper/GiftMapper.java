@@ -20,6 +20,8 @@ public interface GiftMapper {
     @Mapping(target = "isDeleted", ignore = true)
     @Mapping(target = "deletedAt", ignore = true)
     @Mapping(target = "deletionReason", ignore = true)
+    @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "privacyLevel", ignore = true)
     Gift toEntity(GiftDto dto);
 
     List<GiftDto> toListDto(List<Gift> list);

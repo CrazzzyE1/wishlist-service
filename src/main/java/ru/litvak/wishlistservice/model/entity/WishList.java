@@ -2,7 +2,6 @@ package ru.litvak.wishlistservice.model.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -16,7 +15,6 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@ToString
 @Document(collection = "wishlists")
 public class WishList {
 

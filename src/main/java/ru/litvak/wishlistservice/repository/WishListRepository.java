@@ -16,5 +16,7 @@ public interface WishListRepository extends MongoRepository<WishList, String> {
 
     boolean existsWishListByNameAndUserId(String name, UUID userId);
 
+    boolean existsWishListByIdAndUserId(String id, UUID userId);
+
     List<WishList> findByUserIdAndPrivacyLevelIn(UUID userId, Collection<PrivacyLevel> privacyLevels);
 }

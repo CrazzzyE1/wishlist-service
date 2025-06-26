@@ -3,7 +3,6 @@ package ru.litvak.wishlistservice.model.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import ru.litvak.wishlistservice.enumerated.PrivacyLevel;
 
 import java.math.BigDecimal;
 
@@ -15,6 +14,5 @@ public class GiftDto {
     @NotNull
     private String name;
     private BigDecimal price;
-    private PrivacyLevel privacyLevel;
     private Boolean isOwner;
 }
