@@ -53,6 +53,12 @@ public class WishListServiceImpl implements WishListService {
     }
 
     @Override
+    public void deleteWishListById(String authHeader, String wishlistId) {
+        UUID me = JwtTokenMapper.parseUserId(authHeader);
+        wishListManager.delete(me, wishlistId);
+    }
+
+    @Override
     public IdResponse createWishList(String authHeader, WishListDto dto) {
         WishList wishList = wishListMapper.toEntity(dto);
         wishList.setUserId(JwtTokenMapper.parseUserId(authHeader));

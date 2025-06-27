@@ -14,4 +14,6 @@ public interface WishListService {
     List<WishListDto> getWishLists(String authHeader, UUID userId);
 
     WishListDto getWishListById(String authHeader, String wishlistId);
+
+    void deleteWishListById(String authHeader, String wishlistId);
 }

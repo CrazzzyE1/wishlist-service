@@ -35,7 +35,7 @@ public class GiftManagerManagerImpl implements GiftManager {
 
     @Override
     public List<Gift> getAllByWishListId(String id) {
-        return giftRepository.findAllByWishListId(id);
+        return giftRepository.findAllByWishListIdAndIsDeletedFalse(id);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class GiftManagerManagerImpl implements GiftManager {
     @Override
     @Transactional
     public void delete(UUID me, String id) {
-        Optional<Gift> optionalGift = giftRepository.findByIdAndUserId(id, me);
+        Optional<Gift> optionalGift = giftRepository.findByIdAndUserIdAndIsDeletedFalse(id, me);
         if (optionalGift.isEmpty()) {
             log.warn("An attempt to delete someone else's gift with id: {}, userId: {}", id, me);
             return;
@@ -68,9 +68,9 @@ public class GiftManagerManagerImpl implements GiftManager {
     public List<Gift> getGifts(UUID me, UUID userId, boolean withList) {
         if (userId.equals(me)) {
             if (withList) {
-                return giftRepository.findByUserIdAndWishListIdNotNull(userId);
+                return giftRepository.findByUserIdAndWishListIdNotNullAndIsDeletedFalse(userId);
             }
-            return giftRepository.findByUserIdAndWishListIdIsNull(userId);
+            return giftRepository.findByUserIdAndWishListIdIsNullAndIsDeletedFalse(userId);
         }
 
         RelationsDto relationsDto = userServiceFacade.getRelations(me, userId);
@@ -82,9 +82,9 @@ public class GiftManagerManagerImpl implements GiftManager {
                     .map(WishListId::getId)
                     .toList();
             if (withList) {
-                return giftRepository.findAllByWishListIdIn(ids);
+                return giftRepository.findAllByWishListIdInAndIsDeletedFalse(ids);
             }
-            return giftRepository.findByUserIdAndWishListIdIsNull(userId);
+            return giftRepository.findByUserIdAndWishListIdIsNullAndIsDeletedFalse(userId);
         }
 
         if (FRIENDS_ONLY.equals(userPrivacyLevel) && friends) {
@@ -92,9 +92,9 @@ public class GiftManagerManagerImpl implements GiftManager {
                     .map(WishListId::getId)
                     .toList();
             if (withList) {
-                return giftRepository.findAllByWishListIdIn(ids);
+                return giftRepository.findAllByWishListIdInAndIsDeletedFalse(ids);
             }
-            return giftRepository.findByUserIdAndWishListIdIsNull(userId);
+            return giftRepository.findByUserIdAndWishListIdIsNullAndIsDeletedFalse(userId);
         }
         return List.of();
     }

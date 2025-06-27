@@ -1,6 +1,7 @@
 package ru.litvak.wishlistservice.manager.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.litvak.wishlistservice.enumerated.PrivacyLevel;
 import ru.litvak.wishlistservice.integration.UserServiceFacade;
@@ -10,12 +11,16 @@ import ru.litvak.wishlistservice.model.entity.WishList;
 import ru.litvak.wishlistservice.model.response.IdResponse;
 import ru.litvak.wishlistservice.repository.WishListRepository;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+import static ru.litvak.wishlistservice.enumerated.DeleteReason.USER_REQUEST;
 import static ru.litvak.wishlistservice.enumerated.PrivacyLevel.FRIENDS_ONLY;
 import static ru.litvak.wishlistservice.enumerated.PrivacyLevel.PUBLIC;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class WishListManagerImpl implements WishListManager {
@@ -72,5 +77,19 @@ public class WishListManagerImpl implements WishListManager {
         }
 
         return null;
+    }
+
+    @Override
+    public void delete(UUID me, String id) {
+        Optional<WishList> optional = wishListRepository.findByIdAndUserId(id, me);
+        if (optional.isEmpty()) {
+            log.warn("An attempt to delete someone else's wishlist with id: {}, userId: {}", id, me);
+            return;
+        }
+        WishList wishList = optional.get();
+        wishList.setIsDeleted(true);
+        wishList.setDeletedAt(Instant.now());
+        wishList.setDeletionReason(USER_REQUEST);
+        wishListRepository.save(wishList);
     }
 }

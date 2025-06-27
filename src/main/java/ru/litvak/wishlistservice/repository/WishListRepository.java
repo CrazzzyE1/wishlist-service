@@ -9,6 +9,7 @@ import ru.litvak.wishlistservice.model.entity.WishList;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -19,6 +20,8 @@ public interface WishListRepository extends MongoRepository<WishList, String> {
     boolean existsWishListByNameAndUserId(String name, UUID userId);
 
     boolean existsWishListByIdAndUserId(String id, UUID userId);
+
+    Optional<WishList> findByIdAndUserId(String id, UUID userId);
 
     List<WishList> findByUserIdAndPrivacyLevelIn(UUID userId, Collection<PrivacyLevel> privacyLevels);
 
