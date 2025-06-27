@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.litvak.wishlistservice.manager.GiftManager;
 import ru.litvak.wishlistservice.mapper.GiftMapper;
 import ru.litvak.wishlistservice.model.dto.GiftDto;
+import ru.litvak.wishlistservice.model.request.AddGiftRequest;
 import ru.litvak.wishlistservice.model.response.IdResponse;
 import ru.litvak.wishlistservice.service.GiftService;
 import ru.litvak.wishlistservice.util.JwtTokenMapper;
@@ -41,5 +42,11 @@ public class GiftServiceImpl implements GiftService {
     public List<GiftDto> getGifts(String authHeader, UUID userId, Boolean withList) {
         UUID me = JwtTokenMapper.parseUserId(authHeader);
         return giftMapper.toListDto(giftManager.getGifts(me, userId, withList));
+    }
+
+    @Override
+    public void addGift(String authHeader, AddGiftRequest request) {
+        UUID me = JwtTokenMapper.parseUserId(authHeader);
+        giftManager.add(me, request.getGiftId());
     }
 }

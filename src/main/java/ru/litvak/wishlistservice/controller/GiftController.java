@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.litvak.wishlistservice.model.dto.GiftDto;
+import ru.litvak.wishlistservice.model.request.AddGiftRequest;
 import ru.litvak.wishlistservice.model.response.IdResponse;
 import ru.litvak.wishlistservice.service.GiftService;
 
@@ -45,5 +46,11 @@ public class GiftController {
                                   @RequestParam(value = "withList", required = false,
                                           defaultValue = "true") Boolean withList) {
         return giftService.getGifts(authHeader, userId, withList);
+    }
+
+    @PostMapping("/add")
+    public void addGift(@RequestHeader(value = "Authorization") String authHeader,
+                        @RequestBody @Valid AddGiftRequest request) {
+        giftService.addGift(authHeader, request);
     }
 }
