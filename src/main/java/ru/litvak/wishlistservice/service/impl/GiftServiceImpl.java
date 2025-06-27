@@ -45,8 +45,8 @@ public class GiftServiceImpl implements GiftService {
     }
 
     @Override
-    public void addGift(String authHeader, AddGiftRequest request) {
+    public IdResponse addGift(String authHeader, AddGiftRequest request) {
         UUID me = JwtTokenMapper.parseUserId(authHeader);
-        giftManager.add(me, request.getGiftId());
+        return giftManager.add(me, request.getGiftId());
     }
 }

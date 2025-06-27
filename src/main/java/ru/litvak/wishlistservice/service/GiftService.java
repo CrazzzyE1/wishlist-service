@@ -17,5 +17,5 @@ public interface GiftService {
 
     List<GiftDto> getGifts(String authHeader, UUID userId, Boolean withList);
 
-    void addGift(String authHeader, @Valid AddGiftRequest request);
+    IdResponse addGift(String authHeader, @Valid AddGiftRequest request);
 }

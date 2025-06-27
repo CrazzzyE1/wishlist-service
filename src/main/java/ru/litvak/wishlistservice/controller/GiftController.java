@@ -49,8 +49,8 @@ public class GiftController {
     }
 
     @PostMapping("/add")
-    public void addGift(@RequestHeader(value = "Authorization") String authHeader,
+    public IdResponse addGift(@RequestHeader(value = "Authorization") String authHeader,
                         @RequestBody @Valid AddGiftRequest request) {
-        giftService.addGift(authHeader, request);
+        return giftService.addGift(authHeader, request);
     }
 }

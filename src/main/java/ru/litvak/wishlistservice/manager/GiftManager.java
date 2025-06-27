@@ -16,5 +16,5 @@ public interface GiftManager {
 
     List<Gift> getGifts(UUID me, UUID userId, boolean withList);
 
-    void add(UUID me, String id);
+    IdResponse add(UUID me, String id);
 }
