@@ -5,10 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.litvak.wishlistservice.enumerated.PrivacyLevel;
 import ru.litvak.wishlistservice.integration.UserServiceFacade;
+import ru.litvak.wishlistservice.manager.GiftManager;
 import ru.litvak.wishlistservice.manager.WishListManager;
 import ru.litvak.wishlistservice.model.dto.RelationsDto;
+import ru.litvak.wishlistservice.model.entity.Gift;
 import ru.litvak.wishlistservice.model.entity.WishList;
 import ru.litvak.wishlistservice.model.response.IdResponse;
+import ru.litvak.wishlistservice.repository.GiftRepository;
 import ru.litvak.wishlistservice.repository.WishListRepository;
 
 import java.time.Instant;
@@ -26,6 +29,8 @@ import static ru.litvak.wishlistservice.enumerated.PrivacyLevel.PUBLIC;
 public class WishListManagerImpl implements WishListManager {
 
     private final WishListRepository wishListRepository;
+    private final GiftRepository giftRepository;
+    private final GiftManager giftManager;
     private final UserServiceFacade userServiceFacade;
 
     @Override
@@ -87,6 +92,15 @@ public class WishListManagerImpl implements WishListManager {
             return;
         }
         WishList wishList = optional.get();
+        List<Gift> gifts = giftManager.getAllByWishListId(wishList.getId());
+
+        gifts.forEach(gift -> {
+            gift.setIsDeleted(true);
+            gift.setDeletedAt(Instant.now());
+            gift.setDeletionReason(USER_REQUEST);
+            giftRepository.save(gift);
+        });
+
         wishList.setIsDeleted(true);
         wishList.setDeletedAt(Instant.now());
         wishList.setDeletionReason(USER_REQUEST);
