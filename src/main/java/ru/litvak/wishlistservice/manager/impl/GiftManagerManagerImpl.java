@@ -8,12 +8,10 @@ import ru.litvak.wishlistservice.manager.GiftManager;
 import ru.litvak.wishlistservice.model.dto.RelationsDto;
 import ru.litvak.wishlistservice.model.dto.WishListId;
 import ru.litvak.wishlistservice.model.entity.Gift;
-import ru.litvak.wishlistservice.model.entity.WishList;
 import ru.litvak.wishlistservice.model.response.IdResponse;
 import ru.litvak.wishlistservice.repository.GiftRepository;
 import ru.litvak.wishlistservice.repository.WishListRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,17 +34,8 @@ public class GiftManagerManagerImpl implements GiftManager {
     @Override
     public IdResponse create(UUID me, Gift gift) {
         String wishListId = gift.getWishListId();
-        if (wishListId != null) {
-            if (!wishListRepository.existsWishListByIdAndUserId(wishListId, me)) {
-                throw new RuntimeException("WishList id %s does not exist".formatted(wishListId));
-            }
-        } else {
-            WishList wishList = new WishList();
-            wishList.setUserId(me);
-            // FIXME 26.06.2025:13:23: Изменить логику дефолтного списка
-            wishList.setName("WishList (%s)".formatted(LocalDateTime.now()));
-            WishList emptyListSaved = wishListRepository.save(wishList);
-            gift.setWishListId(emptyListSaved.getId());
+        if (wishListId != null && !wishListRepository.existsWishListByIdAndUserId(wishListId, me)) {
+            throw new RuntimeException("WishList id %s does not exist".formatted(wishListId));
         }
         gift.setUserId(me);
         Gift saved = giftRepository.save(gift);
@@ -59,9 +48,12 @@ public class GiftManagerManagerImpl implements GiftManager {
     }
 
     @Override
-    public List<Gift> getGifts(UUID me, UUID userId) {
+    public List<Gift> getGifts(UUID me, UUID userId, boolean withList) {
         if (userId.equals(me)) {
-            return giftRepository.findByUserId(userId);
+            if (withList) {
+                return giftRepository.findByUserIdAndWishListIdNotNull(userId);
+            }
+            return giftRepository.findByUserIdAndWishListIdIsNull(userId);
         }
 
         RelationsDto relationsDto = userServiceFacade.getRelations(me, userId);
@@ -72,14 +64,20 @@ public class GiftManagerManagerImpl implements GiftManager {
             List<String> ids = wishListRepository.findIdsByUserIdAndPrivacyLevelIn(userId, searchPrivacyLevels).stream()
                     .map(WishListId::getId)
                     .toList();
-            return giftRepository.findAllByWishListIdIn(ids);
+            if (withList) {
+                return giftRepository.findAllByWishListIdIn(ids);
+            }
+            return giftRepository.findByUserIdAndWishListIdIsNull(userId);
         }
 
         if (FRIENDS_ONLY.equals(userPrivacyLevel) && friends) {
             List<String> ids = wishListRepository.findIdsByUserIdAndPrivacyLevelIn(userId, List.of(PUBLIC, FRIENDS_ONLY)).stream()
                     .map(WishListId::getId)
                     .toList();
-            return giftRepository.findAllByWishListIdIn(ids);
+            if (withList) {
+                return giftRepository.findAllByWishListIdIn(ids);
+            }
+            return giftRepository.findByUserIdAndWishListIdIsNull(userId);
         }
         return List.of();
     }

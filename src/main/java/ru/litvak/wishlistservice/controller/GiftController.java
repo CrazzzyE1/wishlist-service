@@ -33,13 +33,17 @@ public class GiftController {
     }
 
     @GetMapping(value = "/me")
-    public List<GiftDto> getOwnerGifts(@RequestHeader(value = "Authorization") String authHeader) {
-        return giftService.getOwnerGifts(authHeader);
+    public List<GiftDto> getOwnerGifts(@RequestHeader(value = "Authorization") String authHeader,
+                                       @RequestParam(value = "withList", required = false,
+                                               defaultValue = "true") Boolean withList) {
+        return giftService.getOwnerGifts(authHeader, withList);
     }
 
     @GetMapping(value = "/user/{userId}")
     public List<GiftDto> getGifts(@RequestHeader(value = "Authorization") String authHeader,
-                                  @PathVariable UUID userId) {
-        return giftService.getGifts(authHeader, userId);
+                                  @PathVariable UUID userId,
+                                  @RequestParam(value = "withList", required = false,
+                                          defaultValue = "true") Boolean withList) {
+        return giftService.getGifts(authHeader, userId, withList);
     }
 }

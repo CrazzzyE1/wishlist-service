@@ -14,5 +14,5 @@ public interface GiftManager {
 
     void delete(UUID me, String id);
 
-    List<Gift> getGifts(UUID me, UUID userId);
+    List<Gift> getGifts(UUID me, UUID userId, boolean withList);
 }

@@ -12,7 +12,7 @@ public interface GiftService {
 
     void deleteGift(String authHeader, String id);
 
-    List<GiftDto> getOwnerGifts(String authHeader);
+    List<GiftDto> getOwnerGifts(String authHeader, Boolean withList);
 
-    List<GiftDto> getGifts(String authHeader, UUID userId);
+    List<GiftDto> getGifts(String authHeader, UUID userId, Boolean withList);
 }

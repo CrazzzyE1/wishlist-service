@@ -32,14 +32,14 @@ public class GiftServiceImpl implements GiftService {
     }
 
     @Override
-    public List<GiftDto> getOwnerGifts(String authHeader) {
+    public List<GiftDto> getOwnerGifts(String authHeader, Boolean withList) {
         UUID me = JwtTokenMapper.parseUserId(authHeader);
-        return giftMapper.toListDto(giftManager.getGifts(me, me));
+        return giftMapper.toListDto(giftManager.getGifts(me, me, withList));
     }
 
     @Override
-    public List<GiftDto> getGifts(String authHeader, UUID userId) {
+    public List<GiftDto> getGifts(String authHeader, UUID userId, Boolean withList) {
         UUID me = JwtTokenMapper.parseUserId(authHeader);
-        return giftMapper.toListDto(giftManager.getGifts(me, userId));
+        return giftMapper.toListDto(giftManager.getGifts(me, userId, withList));
     }
 }
