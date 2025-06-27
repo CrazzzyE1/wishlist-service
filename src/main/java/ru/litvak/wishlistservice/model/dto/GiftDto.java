@@ -1,6 +1,6 @@
 package ru.litvak.wishlistservice.model.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public class GiftDto {
     private String id;
     private String wishListId;
-    @NotNull
+    @NotEmpty
     private String name;
     private BigDecimal price;
     private String link;

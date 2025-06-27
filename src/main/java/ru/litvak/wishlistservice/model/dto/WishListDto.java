@@ -1,6 +1,6 @@
 package ru.litvak.wishlistservice.model.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 import ru.litvak.wishlistservice.enumerated.PrivacyLevel;
@@ -13,7 +13,7 @@ import java.util.List;
 public class WishListDto {
 
     private String id;
-    @NotNull
+    @NotEmpty
     private String name;
     private LocalDate eventDate;
     private PrivacyLevel privacyLevel;
