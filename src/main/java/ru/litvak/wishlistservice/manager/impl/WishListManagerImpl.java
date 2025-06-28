@@ -36,7 +36,7 @@ public class WishListManagerImpl implements WishListManager {
     @Override
     public List<WishList> getWishLists(UUID me, UUID userId) {
         if (userId.equals(me)) {
-            return wishListRepository.findByUserId(userId);
+            return wishListRepository.findByUserIdAndIsDeletedFalse(userId);
         }
 
         RelationsDto relationsDto = userServiceFacade.getRelations(me, userId);
@@ -44,11 +44,11 @@ public class WishListManagerImpl implements WishListManager {
         boolean friends = relationsDto.isFriends();
         if (PUBLIC.equals(userPrivacyLevel)) {
             List<PrivacyLevel> searchPrivacyLevels = friends ? List.of(PUBLIC, FRIENDS_ONLY) : List.of(PUBLIC);
-            return wishListRepository.findByUserIdAndPrivacyLevelIn(userId, searchPrivacyLevels);
+            return wishListRepository.findByUserIdAndPrivacyLevelInAndIsDeletedFalse(userId, searchPrivacyLevels);
         }
 
         if (FRIENDS_ONLY.equals(userPrivacyLevel) && friends) {
-            return wishListRepository.findByUserIdAndPrivacyLevelIn(userId, List.of(PUBLIC, FRIENDS_ONLY));
+            return wishListRepository.findByUserIdAndPrivacyLevelInAndIsDeletedFalse(userId, List.of(PUBLIC, FRIENDS_ONLY));
         }
         return List.of();
     }
@@ -56,7 +56,7 @@ public class WishListManagerImpl implements WishListManager {
     @Override
     public IdResponse create(WishList wishList) {
         String name = wishList.getName();
-        if (wishListRepository.existsWishListByNameAndUserId(name, wishList.getUserId())) {
+        if (wishListRepository.existsWishListByNameAndUserIdAndIsDeletedFalse(name, wishList.getUserId())) {
             throw new RuntimeException("WishList with name %s already exists".formatted(name));
         }
         WishList saved = wishListRepository.save(wishList);
@@ -65,9 +65,14 @@ public class WishListManagerImpl implements WishListManager {
 
     @Override
     public WishList getById(UUID me, String id) {
-        WishList wishList = wishListRepository.findById(id)
+        WishList wishList = wishListRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("WishList with id %s not found.".formatted(id)));
         UUID userId = wishList.getUserId();
+
+        if (me.equals(userId)) {
+            return wishList;
+        }
+
         RelationsDto relationsDto = userServiceFacade.getRelations(me, userId);
         PrivacyLevel userPrivacyLevel = relationsDto.getPrivacyLevel();
         boolean friends = relationsDto.isFriends();
@@ -86,7 +91,7 @@ public class WishListManagerImpl implements WishListManager {
 
     @Override
     public void delete(UUID me, String id) {
-        Optional<WishList> optional = wishListRepository.findByIdAndUserId(id, me);
+        Optional<WishList> optional = wishListRepository.findByIdAndUserIdAndIsDeletedFalse(id, me);
         if (optional.isEmpty()) {
             log.warn("An attempt to delete someone else's wishlist with id: {}, userId: {}", id, me);
             return;

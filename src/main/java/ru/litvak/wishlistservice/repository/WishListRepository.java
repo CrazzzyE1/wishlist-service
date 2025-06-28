@@ -15,16 +15,18 @@ import java.util.UUID;
 @Repository
 public interface WishListRepository extends MongoRepository<WishList, String> {
 
-    List<WishList> findByUserId(UUID userId);
+    List<WishList> findByUserIdAndIsDeletedFalse(UUID userId);
 
-    boolean existsWishListByNameAndUserId(String name, UUID userId);
+    boolean existsWishListByNameAndUserIdAndIsDeletedFalse(String name, UUID userId);
 
-    boolean existsWishListByIdAndUserId(String id, UUID userId);
+    boolean existsWishListByIdAndUserIdAndIsDeletedFalse(String id, UUID userId);
 
-    Optional<WishList> findByIdAndUserId(String id, UUID userId);
+    Optional<WishList> findByIdAndUserIdAndIsDeletedFalse(String id, UUID userId);
 
-    List<WishList> findByUserIdAndPrivacyLevelIn(UUID userId, Collection<PrivacyLevel> privacyLevels);
+    List<WishList> findByUserIdAndPrivacyLevelInAndIsDeletedFalse(UUID userId, Collection<PrivacyLevel> privacyLevels);
 
     @Query(value = "{ 'userId': ?0, 'privacyLevel': { $in: ?1 } }", fields = "{ '_id': 1 }")
-    List<WishListId> findIdsByUserIdAndPrivacyLevelIn(UUID userId, Collection<PrivacyLevel> privacyLevels);
+    List<WishListId> findIdsByUserIdAndPrivacyLevelInAndIsDeletedFalse(UUID userId, Collection<PrivacyLevel> privacyLevels);
+
+    Optional<WishList> findByIdAndIsDeletedFalse(String id);
 }

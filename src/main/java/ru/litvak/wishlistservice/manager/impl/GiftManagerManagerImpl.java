@@ -41,7 +41,7 @@ public class GiftManagerManagerImpl implements GiftManager {
     @Override
     public IdResponse create(UUID me, Gift gift) {
         String wishListId = gift.getWishListId();
-        if (wishListId != null && !wishListRepository.existsWishListByIdAndUserId(wishListId, me)) {
+        if (wishListId != null && !wishListRepository.existsWishListByIdAndUserIdAndIsDeletedFalse(wishListId, me)) {
             throw new RuntimeException("WishList id %s does not exist".formatted(wishListId));
         }
         gift.setUserId(me);
@@ -78,7 +78,7 @@ public class GiftManagerManagerImpl implements GiftManager {
         boolean friends = relationsDto.isFriends();
         if (PUBLIC.equals(userPrivacyLevel)) {
             List<PrivacyLevel> searchPrivacyLevels = friends ? List.of(PUBLIC, FRIENDS_ONLY) : List.of(PUBLIC);
-            List<String> ids = wishListRepository.findIdsByUserIdAndPrivacyLevelIn(userId, searchPrivacyLevels).stream()
+            List<String> ids = wishListRepository.findIdsByUserIdAndPrivacyLevelInAndIsDeletedFalse(userId, searchPrivacyLevels).stream()
                     .map(WishListId::getId)
                     .toList();
             if (withList) {
@@ -88,7 +88,7 @@ public class GiftManagerManagerImpl implements GiftManager {
         }
 
         if (FRIENDS_ONLY.equals(userPrivacyLevel) && friends) {
-            List<String> ids = wishListRepository.findIdsByUserIdAndPrivacyLevelIn(userId, List.of(PUBLIC, FRIENDS_ONLY)).stream()
+            List<String> ids = wishListRepository.findIdsByUserIdAndPrivacyLevelInAndIsDeletedFalse(userId, List.of(PUBLIC, FRIENDS_ONLY)).stream()
                     .map(WishListId::getId)
                     .toList();
             if (withList) {
@@ -101,7 +101,7 @@ public class GiftManagerManagerImpl implements GiftManager {
 
     @Override
     public IdResponse add(UUID me, String id) {
-        Gift gift = giftRepository.findById(id)
+        Gift gift = giftRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Gift with id %s not found.".formatted(id)));
         UUID userId = gift.getUserId();
         String wishListId = gift.getWishListId();
@@ -115,7 +115,7 @@ public class GiftManagerManagerImpl implements GiftManager {
         }
 
         if (wishListId != null) {
-            WishList wishList = wishListRepository.findById(wishListId)
+            WishList wishList = wishListRepository.findByIdAndIsDeletedFalse(wishListId)
                     .orElseThrow(() -> new RuntimeException("WishList with id %s not found.".formatted(wishListId)));
 
             if (PUBLIC.equals(userPrivacyLevel)) {

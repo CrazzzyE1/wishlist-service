@@ -20,4 +20,6 @@ public interface GiftRepository extends MongoRepository<Gift, String> {
     List<Gift> findByUserIdAndWishListIdIsNullAndIsDeletedFalse(UUID userId);
 
     Optional<Gift> findByIdAndUserIdAndIsDeletedFalse(String id, UUID me);
+
+    Optional<Gift> findByIdAndIsDeletedFalse(String id);
 }
