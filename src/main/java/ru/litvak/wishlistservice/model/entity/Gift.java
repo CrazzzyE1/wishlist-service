@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import ru.litvak.wishlistservice.enumerated.DeleteReason;
 import ru.litvak.wishlistservice.enumerated.PrivacyLevel;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -22,7 +21,7 @@ public class Gift {
     private String wishListId;
     private UUID userId;
     private String name;
-    private BigDecimal price;
+    private Price price;
     private String link;
     private PrivacyLevel privacyLevel = PrivacyLevel.PUBLIC;
     @CreatedDate

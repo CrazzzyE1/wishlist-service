@@ -7,7 +7,8 @@ import ru.litvak.wishlistservice.model.entity.Gift;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        uses = PriceMapper.class)
 public interface GiftMapper {
 
     @Mapping(target = "isOwner", ignore = true)
