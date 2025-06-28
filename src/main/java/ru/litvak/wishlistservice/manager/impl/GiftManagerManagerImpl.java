@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.litvak.wishlistservice.enumerated.PrivacyLevel;
+import ru.litvak.wishlistservice.exception.NotFoundException;
 import ru.litvak.wishlistservice.integration.UserServiceFacade;
 import ru.litvak.wishlistservice.manager.GiftManager;
 import ru.litvak.wishlistservice.model.dto.RelationsDto;
@@ -42,7 +43,7 @@ public class GiftManagerManagerImpl implements GiftManager {
     public IdResponse create(UUID me, Gift gift) {
         String wishListId = gift.getWishListId();
         if (wishListId != null && !wishListRepository.existsWishListByIdAndUserIdAndIsDeletedFalse(wishListId, me)) {
-            throw new RuntimeException("WishList id %s does not exist".formatted(wishListId));
+            throw new NotFoundException("WishList id %s does not exist".formatted(wishListId));
         }
         gift.setUserId(me);
         Gift saved = giftRepository.save(gift);
@@ -102,7 +103,7 @@ public class GiftManagerManagerImpl implements GiftManager {
     @Override
     public IdResponse add(UUID me, String id) {
         Gift gift = giftRepository.findByIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> new RuntimeException("Gift with id %s not found.".formatted(id)));
+                .orElseThrow(() -> new NotFoundException("Gift with id %s not found.".formatted(id)));
         UUID userId = gift.getUserId();
         String wishListId = gift.getWishListId();
         RelationsDto relationsDto = userServiceFacade.getRelations(me, userId);
@@ -116,7 +117,7 @@ public class GiftManagerManagerImpl implements GiftManager {
 
         if (wishListId != null) {
             WishList wishList = wishListRepository.findByIdAndIsDeletedFalse(wishListId)
-                    .orElseThrow(() -> new RuntimeException("WishList with id %s not found.".formatted(wishListId)));
+                    .orElseThrow(() -> new NotFoundException("WishList with id %s not found.".formatted(wishListId)));
 
             if (PUBLIC.equals(userPrivacyLevel)) {
                 List<PrivacyLevel> searchPrivacyLevels = friends ? List.of(PUBLIC, FRIENDS_ONLY) : List.of(PUBLIC);

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.litvak.wishlistservice.enumerated.PrivacyLevel;
+import ru.litvak.wishlistservice.exception.NotFoundException;
 import ru.litvak.wishlistservice.integration.UserServiceFacade;
 import ru.litvak.wishlistservice.manager.GiftManager;
 import ru.litvak.wishlistservice.manager.WishListManager;
@@ -57,7 +58,7 @@ public class WishListManagerImpl implements WishListManager {
     public IdResponse create(WishList wishList) {
         String name = wishList.getName();
         if (wishListRepository.existsWishListByNameAndUserIdAndIsDeletedFalse(name, wishList.getUserId())) {
-            throw new RuntimeException("WishList with name %s already exists".formatted(name));
+            throw new NotFoundException("WishList with name %s already exists".formatted(name));
         }
         WishList saved = wishListRepository.save(wishList);
         return new IdResponse(saved.getId());
@@ -66,7 +67,7 @@ public class WishListManagerImpl implements WishListManager {
     @Override
     public WishList getById(UUID me, String id) {
         WishList wishList = wishListRepository.findByIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> new RuntimeException("WishList with id %s not found.".formatted(id)));
+                .orElseThrow(() -> new NotFoundException("WishList with id %s not found.".formatted(id)));
         UUID userId = wishList.getUserId();
 
         if (me.equals(userId)) {
