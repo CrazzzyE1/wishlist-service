@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import ru.litvak.wishlistservice.integration.UserServiceFacade;
-import ru.litvak.wishlistservice.model.dto.RelationRequest;
-import ru.litvak.wishlistservice.model.dto.RelationsDto;
+import ru.litvak.wishlistservice.integration.request.RelationRequest;
+import ru.litvak.wishlistservice.integration.response.RelationsDto;
 
 import java.util.UUID;
 
@@ -22,7 +22,7 @@ public class UserServiceFacadeImpl implements UserServiceFacade {
     @Override
     public RelationsDto getRelations(UUID me, UUID userId) {
         return restTemplate.postForObject(
-                "http://USER-SERVICE/api/v1/profiles/relations",
+                "/api/v1/profiles/relations",
                 new RelationRequest(me, userId),
                 RelationsDto.class
         );

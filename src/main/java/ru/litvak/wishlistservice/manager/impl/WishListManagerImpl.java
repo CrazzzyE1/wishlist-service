@@ -8,7 +8,7 @@ import ru.litvak.wishlistservice.exception.NotFoundException;
 import ru.litvak.wishlistservice.integration.UserServiceFacade;
 import ru.litvak.wishlistservice.manager.GiftManager;
 import ru.litvak.wishlistservice.manager.WishListManager;
-import ru.litvak.wishlistservice.model.dto.RelationsDto;
+import ru.litvak.wishlistservice.integration.response.RelationsDto;
 import ru.litvak.wishlistservice.model.entity.Gift;
 import ru.litvak.wishlistservice.model.entity.WishList;
 import ru.litvak.wishlistservice.model.response.IdResponse;

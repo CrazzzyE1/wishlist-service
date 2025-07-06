@@ -1,6 +1,6 @@
 package ru.litvak.wishlistservice.integration;
 
-import ru.litvak.wishlistservice.model.dto.RelationsDto;
+import ru.litvak.wishlistservice.integration.response.RelationsDto;
 
 import java.util.UUID;
 

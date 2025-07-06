@@ -1,4 +1,4 @@
-package ru.litvak.wishlistservice.model.dto;
+package ru.litvak.wishlistservice.integration.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

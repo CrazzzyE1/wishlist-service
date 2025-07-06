@@ -1,4 +1,4 @@
-package ru.litvak.wishlistservice.model.dto;
+package ru.litvak.wishlistservice.integration.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
