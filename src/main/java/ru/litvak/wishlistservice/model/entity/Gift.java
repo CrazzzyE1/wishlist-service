@@ -23,6 +23,7 @@ public class Gift {
     private String name;
     private Price price;
     private String link;
+    private String description;
     private PrivacyLevel privacyLevel = PrivacyLevel.PUBLIC;
     @CreatedDate
     private Instant createdAt;

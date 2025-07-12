@@ -14,4 +14,5 @@ public class GiftDto {
     private PriceDto price;
     private String link;
     private Boolean isOwner;
+    private String description;
 }

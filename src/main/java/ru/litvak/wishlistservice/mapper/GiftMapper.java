@@ -14,8 +14,6 @@ public interface GiftMapper {
     @Mapping(target = "isOwner", ignore = true)
     GiftDto toDto(Gift entity);
 
-    List<GiftDto> toListEntity(List<GiftDto> list);
-
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "isDeleted", ignore = true)
