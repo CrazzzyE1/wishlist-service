@@ -3,6 +3,7 @@ package ru.litvak.wishlistservice.manager.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import ru.litvak.wishlistservice.enumerated.PrivacyLevel;
 import ru.litvak.wishlistservice.exception.NotFoundException;
 import ru.litvak.wishlistservice.integration.UserServiceFacade;
@@ -111,5 +112,22 @@ public class WishListManagerImpl implements WishListManager {
         wishList.setDeletedAt(Instant.now());
         wishList.setDeletionReason(USER_REQUEST);
         wishListRepository.save(wishList);
+    }
+
+    @Override
+    @Transactional
+    public IdResponse edit(UUID me, WishList info, String id) {
+        WishList wishList = wishListRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new NotFoundException("WishList with id %s not found.".formatted(id)));
+        UUID userId = wishList.getUserId();
+
+        if (!me.equals(userId)) {
+            throw  new NotFoundException("WishList with id %s not found.".formatted(id));
+        }
+
+        wishList.setName(info.getName());
+        wishList.setEventDate(info.getEventDate());
+        wishList.setPrivacyLevel(info.getPrivacyLevel());
+        return new IdResponse(wishListRepository.save(wishList).getId());
     }
 }

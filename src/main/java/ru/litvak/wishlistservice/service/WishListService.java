@@ -1,5 +1,6 @@
 package ru.litvak.wishlistservice.service;
 
+import jakarta.validation.Valid;
 import ru.litvak.wishlistservice.model.dto.WishListDto;
 import ru.litvak.wishlistservice.model.response.IdResponse;
 
@@ -16,4 +17,6 @@ public interface WishListService {
     WishListDto getWishListById(String authHeader, String wishlistId);
 
     void deleteWishListById(String authHeader, String wishlistId);
+
+    IdResponse editWishList(String authHeader, @Valid WishListDto wishListDto, String wishlistId);
 }

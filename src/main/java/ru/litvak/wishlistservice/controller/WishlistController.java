@@ -47,4 +47,11 @@ public class WishlistController {
                                    @PathVariable String wishlistId) {
         wishListService.deleteWishListById(authHeader, wishlistId);
     }
+
+    @PatchMapping("/{wishlistId}")
+    public IdResponse editWishList(@RequestHeader(value = "Authorization") String authHeader,
+                                   @RequestBody @Valid WishListDto wishListDto,
+                                   @PathVariable String wishlistId) {
+        return wishListService.editWishList(authHeader, wishListDto, wishlistId);
+    }
 }

@@ -14,4 +14,6 @@ public interface WishListManager {
     WishList getById(UUID me, String id);
 
     void delete(UUID me, String id);
+
+    IdResponse edit(UUID me, WishList wishList, String wishlistId);
 }
