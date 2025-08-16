@@ -3,6 +3,7 @@ package ru.litvak.wishlistservice.service;
 import jakarta.validation.Valid;
 import ru.litvak.wishlistservice.model.dto.GiftDto;
 import ru.litvak.wishlistservice.model.dto.GiftInfoDto;
+import ru.litvak.wishlistservice.model.dto.GiftsCountDto;
 import ru.litvak.wishlistservice.model.request.AddGiftRequest;
 import ru.litvak.wishlistservice.model.response.IdResponse;
 
@@ -21,4 +22,6 @@ public interface GiftService {
     IdResponse addGift(String authHeader, @Valid AddGiftRequest request);
 
     GiftInfoDto getGiftInfo(String id);
+
+    GiftsCountDto getGiftsCount(String authHeader, UUID userId);
 }

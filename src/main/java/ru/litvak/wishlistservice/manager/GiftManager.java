@@ -1,6 +1,7 @@
 package ru.litvak.wishlistservice.manager;
 
 import ru.litvak.wishlistservice.model.dto.GiftInfoDto;
+import ru.litvak.wishlistservice.model.dto.GiftsCountDto;
 import ru.litvak.wishlistservice.model.entity.Gift;
 import ru.litvak.wishlistservice.model.response.IdResponse;
 
@@ -20,4 +21,6 @@ public interface GiftManager {
     IdResponse add(UUID me, String id);
 
     GiftInfoDto getInfo(String id);
+
+    GiftsCountDto getCount(UUID userId);
 }

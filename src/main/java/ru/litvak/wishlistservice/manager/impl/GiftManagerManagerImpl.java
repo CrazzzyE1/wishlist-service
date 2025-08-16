@@ -10,6 +10,7 @@ import ru.litvak.wishlistservice.integration.UserServiceFacade;
 import ru.litvak.wishlistservice.manager.GiftManager;
 import ru.litvak.wishlistservice.integration.response.RelationsDto;
 import ru.litvak.wishlistservice.model.dto.GiftInfoDto;
+import ru.litvak.wishlistservice.model.dto.GiftsCountDto;
 import ru.litvak.wishlistservice.model.dto.WishListId;
 import ru.litvak.wishlistservice.model.entity.Gift;
 import ru.litvak.wishlistservice.model.entity.WishList;
@@ -142,6 +143,11 @@ public class GiftManagerManagerImpl implements GiftManager {
                 .orElseThrow(() -> new NotFoundException("Gift with id %s not found.".formatted(id)));
         Optional<WishList> listOptional = wishListRepository.findByIdAndIsDeletedFalse(gift.getWishListId());
         return new GiftInfoDto(gift.getUserId(), listOptional.map(WishList::getPrivacyLevel).orElse(null));
+    }
+
+    @Override
+    public GiftsCountDto getCount(UUID userId) {
+        return new GiftsCountDto(giftRepository.countByUserIdAndIsDeletedFalse(userId));
     }
 
     private IdResponse add(UUID me, Gift gift) {

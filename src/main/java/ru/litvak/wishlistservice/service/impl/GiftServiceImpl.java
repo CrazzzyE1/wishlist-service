@@ -6,6 +6,7 @@ import ru.litvak.wishlistservice.manager.GiftManager;
 import ru.litvak.wishlistservice.mapper.GiftMapper;
 import ru.litvak.wishlistservice.model.dto.GiftDto;
 import ru.litvak.wishlistservice.model.dto.GiftInfoDto;
+import ru.litvak.wishlistservice.model.dto.GiftsCountDto;
 import ru.litvak.wishlistservice.model.request.AddGiftRequest;
 import ru.litvak.wishlistservice.model.response.IdResponse;
 import ru.litvak.wishlistservice.service.GiftService;
@@ -54,5 +55,10 @@ public class GiftServiceImpl implements GiftService {
     @Override
     public GiftInfoDto getGiftInfo(String id) {
         return giftManager.getInfo(id);
+    }
+
+    @Override
+    public GiftsCountDto getGiftsCount(String authHeader, UUID userId) {
+        return giftManager.getCount(userId);
     }
 }

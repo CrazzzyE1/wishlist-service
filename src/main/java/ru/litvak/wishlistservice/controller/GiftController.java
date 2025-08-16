@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.litvak.wishlistservice.model.dto.GiftDto;
 import ru.litvak.wishlistservice.model.dto.GiftInfoDto;
+import ru.litvak.wishlistservice.model.dto.GiftsCountDto;
 import ru.litvak.wishlistservice.model.request.AddGiftRequest;
 import ru.litvak.wishlistservice.model.response.IdResponse;
 import ru.litvak.wishlistservice.service.GiftService;
@@ -58,5 +59,11 @@ public class GiftController {
     @GetMapping(value = "/{id}/info")
     public GiftInfoDto getGiftInfo(@PathVariable String id) {
         return giftService.getGiftInfo(id);
+    }
+
+    @GetMapping(value = "/user/{userId}/count")
+    public GiftsCountDto getGiftsCount(@RequestHeader(value = "Authorization") String authHeader,
+                                       @PathVariable UUID userId) {
+        return giftService.getGiftsCount(authHeader, userId);
     }
 }
