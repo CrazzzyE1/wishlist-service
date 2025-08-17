@@ -156,7 +156,7 @@ public class GiftManagerManagerImpl implements GiftManager {
         Gift gift = giftRepository.findByIdAndIsDeletedFalseAndUserId(id, me)
                 .orElseThrow(() -> new NotFoundException("Gift with id %s not found.".formatted(id)));
         gift.setName(info.getName());
-        gift.setPrice(gift.getPrice());
+        gift.setPrice(info.getPrice());
         gift.setWishListId(info.getWishListId());
         gift.setLink(info.getLink());
         gift.setDescription(info.getDescription());
