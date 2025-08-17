@@ -61,4 +61,10 @@ public class GiftServiceImpl implements GiftService {
     public GiftsCountDto getGiftsCount(String authHeader, UUID userId) {
         return giftManager.getCount(userId);
     }
+
+    @Override
+    public IdResponse editGift(String authHeader, GiftDto giftDto, String giftId) {
+        UUID me = JwtTokenMapper.parseUserId(authHeader);
+        return giftManager.edit(me, giftMapper.toEntity(giftDto), giftId);
+    }
 }

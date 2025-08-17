@@ -66,4 +66,11 @@ public class GiftController {
                                        @PathVariable UUID userId) {
         return giftService.getGiftsCount(authHeader, userId);
     }
+
+    @PatchMapping("/{giftId}")
+    public IdResponse editGift(@RequestHeader(value = "Authorization") String authHeader,
+                               @RequestBody @Valid GiftDto giftDto,
+                               @PathVariable String giftId) {
+        return giftService.editGift(authHeader, giftDto, giftId);
+    }
 }

@@ -24,4 +24,6 @@ public interface GiftService {
     GiftInfoDto getGiftInfo(String id);
 
     GiftsCountDto getGiftsCount(String authHeader, UUID userId);
+
+    IdResponse editGift(String authHeader, @Valid GiftDto giftDto, String giftId);
 }

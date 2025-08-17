@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.litvak.wishlistservice.enumerated.PrivacyLevel;
 import ru.litvak.wishlistservice.exception.NotFoundException;
 import ru.litvak.wishlistservice.integration.UserServiceFacade;
-import ru.litvak.wishlistservice.manager.GiftManager;
 import ru.litvak.wishlistservice.integration.response.RelationsDto;
+import ru.litvak.wishlistservice.manager.GiftManager;
 import ru.litvak.wishlistservice.model.dto.GiftInfoDto;
 import ru.litvak.wishlistservice.model.dto.GiftsCountDto;
 import ru.litvak.wishlistservice.model.dto.WishListId;
@@ -148,6 +148,20 @@ public class GiftManagerManagerImpl implements GiftManager {
     @Override
     public GiftsCountDto getCount(UUID userId) {
         return new GiftsCountDto(giftRepository.countByUserIdAndIsDeletedFalse(userId));
+    }
+
+    @Override
+    @Transactional
+    public IdResponse edit(UUID me, Gift info, String id) {
+        Gift gift = giftRepository.findByIdAndIsDeletedFalseAndUserId(id, me)
+                .orElseThrow(() -> new NotFoundException("Gift with id %s not found.".formatted(id)));
+        gift.setName(info.getName());
+        gift.setPrice(gift.getPrice());
+        gift.setWishListId(info.getWishListId());
+        gift.setLink(info.getLink());
+        gift.setDescription(info.getDescription());
+        giftRepository.save(gift);
+        return new IdResponse(gift.getId());
     }
 
     private IdResponse add(UUID me, Gift gift) {

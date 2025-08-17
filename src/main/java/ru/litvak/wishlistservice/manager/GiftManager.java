@@ -23,4 +23,6 @@ public interface GiftManager {
     GiftInfoDto getInfo(String id);
 
     GiftsCountDto getCount(UUID userId);
+
+    IdResponse edit(UUID me, Gift giftDto, String giftId);
 }
