@@ -170,6 +170,7 @@ public class GiftManagerManagerImpl implements GiftManager {
         toSave.setPrice(gift.getPrice());
         toSave.setLink(gift.getLink());
         toSave.setUserId(me);
+        toSave.setDescription(gift.getDescription());
         return new IdResponse(giftRepository.save(toSave).getId());
     }
 }
