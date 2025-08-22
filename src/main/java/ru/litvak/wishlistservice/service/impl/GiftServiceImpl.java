@@ -2,6 +2,7 @@ package ru.litvak.wishlistservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.litvak.wishlistservice.integration.FilesServiceFacade;
 import ru.litvak.wishlistservice.manager.GiftManager;
 import ru.litvak.wishlistservice.mapper.GiftMapper;
 import ru.litvak.wishlistservice.model.dto.GiftDto;
@@ -21,6 +22,7 @@ public class GiftServiceImpl implements GiftService {
 
     private final GiftManager giftManager;
     private final GiftMapper giftMapper;
+    private final FilesServiceFacade filesServiceFacade;
 
     @Override
     public IdResponse createGift(String authHeader, GiftDto giftDto) {
@@ -49,7 +51,9 @@ public class GiftServiceImpl implements GiftService {
     @Override
     public IdResponse addGift(String authHeader, AddGiftRequest request) {
         UUID me = JwtTokenMapper.parseUserId(authHeader);
-        return giftManager.add(me, request.getGiftId());
+        IdResponse response = giftManager.add(me, request.getGiftId());
+        filesServiceFacade.clonePicture(me, request.getGiftId(), response.getId());
+        return response;
     }
 
     @Override

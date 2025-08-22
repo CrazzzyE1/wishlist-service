@@ -15,4 +15,11 @@ public class RestTemplateConfig {
     public RestTemplate getRestTemplate() {
         return new RestTemplate();
     }
+
+    @Bean
+    @Qualifier("files-service")
+    @LoadBalanced
+    public RestTemplate getFilesServiceRestTemplate() {
+        return new RestTemplate();
+    }
 }
